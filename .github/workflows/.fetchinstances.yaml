@@ -1,0 +1,35 @@
+name: Instances
+
+on:
+  # push:
+  #   branches: ['main']
+  schedule:
+    - cron: '15 */12 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+      - run: yarn install
+      - run: |
+          yarn ts-node fetchInstances.ts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          IP_CHECK_HOST: ${{ secrets.IP_CHECK_HOST }}
+          IP_CHECK_REFERER: ${{ secrets.IP_CHECK_REFERER }}
+          IP_CHECK_URL: ${{ secrets.IP_CHECK_URL }}
+          SEARCHX_URL1: ${{ secrets.SEARCHX_URL1 }}
+          TWITTER_URL1: ${{ secrets.TWITTER_URL1 }}
+          TWITTER_URL2: ${{ secrets.TWITTER_URL2 }}
+          WIKI_URL: ${{ secrets.WIKI_URL }}
+          YOUTUBE_URL1: ${{ secrets.YOUTUBE_URL1 }}
+          YOUTUBE_URL2: ${{ secrets.YOUTUBE_URL2 }}
+          

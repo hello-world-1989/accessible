@@ -29,7 +29,11 @@ async function fetchYoutubeInstances2() {
     }
 
     if (result.length > 0) {
-      saveFile(btoa(JSON.stringify(result)), sha, 'youtube.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'youtube.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
@@ -74,7 +78,11 @@ async function fetchYoutubeInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, fileName);
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        fileName
+      );
     }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
@@ -168,7 +176,11 @@ async function fetchNitterInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'nitter.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'nitter.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing nitter:', error);
@@ -240,7 +252,11 @@ async function fetchSearchXInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'searchx.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'searchx.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing searchx:', error);
@@ -281,7 +297,11 @@ async function fetchWikiInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'wiki.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'wiki.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing wiki:', error);

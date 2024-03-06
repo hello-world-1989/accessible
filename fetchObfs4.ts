@@ -62,7 +62,11 @@ async function fetchObfs() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, fileName);
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        fileName
+      );
     }
   } catch (error) {
     console.log('An error occurred processing obfs4:', error);

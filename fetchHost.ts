@@ -23,7 +23,11 @@ async function fetchHost() {
       status: res,
     };
 
-    saveFile(btoa(JSON.stringify(result)), sha, fileName);
+    saveFile(
+      Buffer.from(JSON.stringify(result)).toString('base64'),
+      sha,
+      fileName
+    );
   } catch (error) {
     console.log('An error occurred processing host:', error);
   }

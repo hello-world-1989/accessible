@@ -1,0 +1,74 @@
+name: Video
+
+on:
+  push:
+    branches: ['main']
+  schedule:
+    - cron: '15 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 10
+
+    steps:
+      - name: Checksum
+        id: checksum-continue
+        run: |
+          ip_address=$(curl $XRAY_URL | md5sum)
+          github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
+
+          if [ "$ip_address" = "$github_ip" ]; then
+              echo "continue=n" >> "$GITHUB_OUTPUT"
+          else 
+              echo "continue=y" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          XRAY_URL: ${{ secrets.XRAY_URL }}
+
+
+      - uses: actions/checkout@v4
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+
+      - name: Setup FFmpeg
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        uses: FedericoCarboni/setup-ffmpeg@v3.1
+
+      - name: Fetch Video
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: |
+          yarn install
+          yarn ts-node fetchVideo1.ts
+        env:
+          IP_CHECK_HOST: ${{ secrets.IP_CHECK_HOST }}
+          IP_CHECK_REFERER: ${{ secrets.IP_CHECK_REFERER }}
+          IP_CHECK_URL: ${{ secrets.IP_CHECK_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+          XRAY_URL: ${{ secrets.XRAY_URL }}
+
+      - name: Commit files
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "github-actions"
+          # git config pull.rebase true
+          # git pull
+          git add --all
+          git commit -m "Add videos"
+          git push
+
+      - name: Youtube Live
+        if: ${{ always() }}
+        env:
+          LIVE_URL: ${{ secrets.LIVE_URL }}
+        run: |
+          curl $LIVE_URL

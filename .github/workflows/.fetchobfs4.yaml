@@ -1,0 +1,30 @@
+name: Obfs4
+
+on:
+  # push:
+  #   branches: ['main']
+  # schedule:
+  #   - cron: '10 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+      - run: yarn install
+      - run: |
+          yarn ts-node fetchObfs4.ts
+        env:
+          IP_CHECK_HOST: ${{ secrets.IP_CHECK_HOST }}
+          IP_CHECK_REFERER: ${{ secrets.IP_CHECK_REFERER }}
+          IP_CHECK_URL: ${{ secrets.IP_CHECK_URL }}
+          OBFS4_URL: ${{ secrets.OBFS4_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
