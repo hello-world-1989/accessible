@@ -4,7 +4,7 @@ on:
   push:
     branches: ['main']
   schedule:
-    - cron: '15 */3 * * *'
+    - cron: '20 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,19 +14,50 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      
       - name: Checksum
         id: checksum-continue
         run: |
           ip_address=$(curl $XRAY_URL | md5sum)
-          github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
+          github_ip=""
+          # github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
 
-          if [ "$ip_address" = "$github_ip" ]; then
+          result1="${ip_address// /}"
+          result2="${github_ip// /}"
+          if [ "$result1" = "$result2" ]; then
+              echo "equal"
               echo "continue=n" >> "$GITHUB_OUTPUT"
           else 
+              echo "not equal"
               echo "continue=y" >> "$GITHUB_OUTPUT"
+              echo "checksum='"$result1"'" >> "$GITHUB_OUTPUT"
           fi
         env:
           XRAY_URL: ${{ secrets.XRAY_URL }}
+
+
+      - name: Cache ffmpeg
+        id: cache-ffmpeg
+        uses: actions/cache@v4
+        with:
+          path: /opt/hostedtoolcache/ffmpeg/6.1.0/
+          key: ${{ runner.os }}-ffmpeg-6.1.0
+      
+      - name: Setup FFmpeg
+        id: setup-ffmpeg
+        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
+        uses: FedericoCarboni/setup-ffmpeg@v3.1
+
+      - name: Run FFmpeg
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: |
+          echo ${{ steps.cache-ffmpeg.outputs.cache-hit }}
+          echo ${{ steps.setup-ffmpeg.outputs.ffmpeg-version }}
+          echo ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}
+
+          sudo ln -s /opt/hostedtoolcache/ffmpeg/6.1.0/x64/ffmpeg /usr/bin/ffmpeg
+
+          ffmpeg -h
 
 
       - uses: actions/checkout@v4
@@ -39,13 +70,12 @@ jobs:
           node-version: 18.x
           cache: 'yarn'
 
-      - name: Setup FFmpeg
-        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
-        uses: FedericoCarboni/setup-ffmpeg@v3.1
+      
 
       - name: Fetch Video
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         run: |
+          echo ${{ steps.checksum-continue.outputs.checksum }} > checksum.txt
           yarn install
           yarn ts-node fetchVideo1.ts
         env:
@@ -67,7 +97,7 @@ jobs:
           git push
 
       - name: Youtube Live
-        if: ${{ always() }}
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         env:
           LIVE_URL: ${{ secrets.LIVE_URL }}
         run: |

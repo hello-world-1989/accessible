@@ -13,7 +13,7 @@ async function fetchYoutubeInstances2() {
 
     const result: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i]?.[0];
@@ -54,7 +54,7 @@ async function fetchYoutubeInstances() {
 
     const resources: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i];
@@ -109,7 +109,7 @@ async function fetchPipedInstances() {
 
     const result: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i];
@@ -139,7 +139,7 @@ async function fetchNitterInstances() {
 
     const resources: any[] = [];
 
-    let length = nitterInstances.length > 15 ? 15 : nitterInstances.length;
+    let length = nitterInstances.length > 10 ? 10 : nitterInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = nitterInstances[i];
@@ -198,7 +198,7 @@ async function fetchTwitterInstances() {
 
     const result: any[] = [];
 
-    let length = nitterInstances.length > 15 ? 15 : nitterInstances.length;
+    let length = nitterInstances.length > 10 ? 10 : nitterInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = nitterInstances[i];
@@ -232,7 +232,7 @@ async function fetchSearchXInstances() {
 
     const resources: any[] = [];
 
-    let length = searchxInstances.length > 15 ? 15 : searchxInstances.length;
+    let length = searchxInstances.length > 10 ? 10 : searchxInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = searchxInstances[i];
@@ -276,7 +276,7 @@ async function fetchWikiInstances() {
 
     const resources: any[] = [];
 
-    let length = wikiInstances.length > 15 ? 15 : wikiInstances.length;
+    let length = wikiInstances.length > 10 ? 10 : wikiInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = wikiInstances[i];
@@ -311,7 +311,7 @@ async function fetchWikiInstances() {
 async function main() {
   await fetchYoutubeInstances();
 
-  await fetchNitterInstances();
+  // await fetchNitterInstances();
 
   await fetchSearchXInstances();
 
