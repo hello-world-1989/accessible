@@ -1,8 +1,8 @@
 name: Video
 
 on:
-  push:
-    branches: ['main']
+  # push:
+  #   branches: ['main']
   schedule:
     - cron: '20 * * * *'
   workflow_dispatch:
@@ -19,8 +19,7 @@ jobs:
         id: checksum-continue
         run: |
           ip_address=$(curl $XRAY_URL | md5sum)
-          github_ip=""
-          # github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
+          github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
 
           result1="${ip_address// /}"
           result2="${github_ip// /}"
@@ -100,5 +99,7 @@ jobs:
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         env:
           LIVE_URL: ${{ secrets.LIVE_URL }}
+          MIRROR_UPDATE_RESTART_WEB_PATH: ${{ secrets.MIRROR_UPDATE_RESTART_WEB_PATH }}
         run: |
           curl $LIVE_URL
+          curl $MIRROR_UPDATE_RESTART_WEB_PATH
