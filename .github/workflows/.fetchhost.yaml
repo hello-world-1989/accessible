@@ -1,0 +1,52 @@
+name: Host
+
+on:
+  # push:
+  #   branches: ['main']
+  # schedule:
+  #   - cron: '10 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # - name: Checksum
+      #   id: checksum-continue
+      #   run: |
+      #       ip_address=$(curl -s $WEB_HOST | jq -r '.ip')
+      #       github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/host.json | jq -r '.hostname')
+
+      #       if [ "$ip_address" = "$github_ip" ]; then
+      #           echo "continue=n" >> "$GITHUB_OUTPUT"
+      #       else 
+      #           echo "continue=y" >> "$GITHUB_OUTPUT"
+      #       fi
+      #   env:
+      #     WEB_HOST: ${{ secrets.WEB_HOST }}
+      - uses: actions/checkout@v3
+        # if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        # if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        with:
+          node-version: 18.x
+          cache: 'yarn'
+      
+      - name: Install packages
+        # if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: yarn install
+      
+      - name: Fetch Host
+        # if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: |
+          yarn ts-node fetchHost.ts
+        env:
+          IP_CHECK_HOST: ${{ secrets.IP_CHECK_HOST }}
+          IP_CHECK_REFERER: ${{ secrets.IP_CHECK_REFERER }}
+          IP_CHECK_URL: ${{ secrets.IP_CHECK_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+          WEB_HOST: ${{ secrets.WEB_HOST }}
+          WEB_RESTART: ${{ secrets.WEB_RESTART }}

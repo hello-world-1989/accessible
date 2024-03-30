@@ -13,7 +13,7 @@ async function fetchYoutubeInstances2() {
 
     const result: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i]?.[0];
@@ -29,7 +29,11 @@ async function fetchYoutubeInstances2() {
     }
 
     if (result.length > 0) {
-      saveFile(btoa(JSON.stringify(result)), sha, 'youtube.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'youtube.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
@@ -50,17 +54,20 @@ async function fetchYoutubeInstances() {
 
     const resources: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i];
+      console.log(`processing invidious: ${currentInstance}`);
       let port = 443;
       let hostname = currentInstance.replace('https://', '');
 
       const res = await ipCheck(hostname, port);
 
       if (res === 'success') {
-        console.log(`youtube instance accessible by China: ${currentInstance}`);
+        console.log(
+          `---invidious instance accessible by China: ${currentInstance}`
+        );
         resources.push(currentInstance);
       }
     }
@@ -74,7 +81,11 @@ async function fetchYoutubeInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, fileName);
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        fileName
+      );
     }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
@@ -101,17 +112,21 @@ async function fetchPipedInstances() {
 
     const result: any[] = [];
 
-    let length = ytInstances.length > 15 ? 15 : ytInstances.length;
+    let length = ytInstances.length > 10 ? 10 : ytInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = ytInstances[i];
+      console.log(`processing piped: ${currentInstance}`);
+
       let port = 443;
       let hostname = currentInstance.replace('https://', '');
 
       const res = await ipCheck(hostname, port);
 
       if (res === 'success') {
-        console.log(`piped instance accessible by China: ${currentInstance}`);
+        console.log(
+          `---piped instance accessible by China: ${currentInstance}`
+        );
         result.push(currentInstance);
       }
     }
@@ -131,7 +146,7 @@ async function fetchNitterInstances() {
 
     const resources: any[] = [];
 
-    let length = nitterInstances.length > 15 ? 15 : nitterInstances.length;
+    let length = nitterInstances.length > 10 ? 10 : nitterInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = nitterInstances[i];
@@ -168,7 +183,11 @@ async function fetchNitterInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'nitter.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'nitter.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing nitter:', error);
@@ -186,7 +205,7 @@ async function fetchTwitterInstances() {
 
     const result: any[] = [];
 
-    let length = nitterInstances.length > 15 ? 15 : nitterInstances.length;
+    let length = nitterInstances.length > 10 ? 10 : nitterInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = nitterInstances[i];
@@ -220,7 +239,7 @@ async function fetchSearchXInstances() {
 
     const resources: any[] = [];
 
-    let length = searchxInstances.length > 15 ? 15 : searchxInstances.length;
+    let length = searchxInstances.length > 10 ? 10 : searchxInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = searchxInstances[i];
@@ -240,7 +259,11 @@ async function fetchSearchXInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'searchx.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'searchx.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing searchx:', error);
@@ -260,7 +283,7 @@ async function fetchWikiInstances() {
 
     const resources: any[] = [];
 
-    let length = wikiInstances.length > 15 ? 15 : wikiInstances.length;
+    let length = wikiInstances.length > 10 ? 10 : wikiInstances.length;
 
     for (let i = 0; i < length; i++) {
       const currentInstance = wikiInstances[i];
@@ -281,7 +304,11 @@ async function fetchWikiInstances() {
 
       const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(btoa(JSON.stringify(result)), sha, 'wiki.json');
+      saveFile(
+        Buffer.from(JSON.stringify(result)).toString('base64'),
+        sha,
+        'wiki.json'
+      );
     }
   } catch (error) {
     console.log('An error occurred processing wiki:', error);
@@ -291,7 +318,7 @@ async function fetchWikiInstances() {
 async function main() {
   await fetchYoutubeInstances();
 
-  await fetchNitterInstances();
+  // await fetchNitterInstances();
 
   await fetchSearchXInstances();
 

@@ -3,10 +3,6 @@ import { saveFile, ipCheck, loadFile, formatDateToYYYYMMDD } from './utils';
 
 async function fetchHost() {
   try {
-    const fileName = 'host.json';
-
-    const sha = await loadFile(fileName);
-
     const hostDataRes = await axios.get(process.env.WEB_HOST ?? '');
 
     const hostname = hostDataRes?.data?.ip;
@@ -15,15 +11,38 @@ async function fetchHost() {
 
     const res = await ipCheck(hostname, port);
 
-    const shanghaiTime = formatDateToYYYYMMDD();
+    if (res === 'success') {
+      const fileName = 'host.json';
 
-    const result = {
-      updateTime: shanghaiTime,
-      hostname: hostname,
-      status: res,
-    };
+      const response = await axios.get(
+        'https://raw.githubusercontent.com/hello-world-1989/accessible/main/host.json'
+      );
 
-    saveFile(btoa(JSON.stringify(result)), sha, fileName);
+      const hostnameGithub = response.data?.hostname;
+
+      console.log('hostnameGithub: ', hostnameGithub);
+
+      if (hostnameGithub === hostname) {
+      } else {
+        const sha = await loadFile(fileName);
+
+        const shanghaiTime = formatDateToYYYYMMDD();
+
+        const result = {
+          updateTime: shanghaiTime,
+          hostname: hostname,
+          status: res,
+        };
+
+        saveFile(
+          Buffer.from(JSON.stringify(result)).toString('base64'),
+          sha,
+          fileName
+        );
+      }
+    } else {
+      await axios.get(process.env.WEB_RESTART ?? '');
+    }
   } catch (error) {
     console.log('An error occurred processing host:', error);
   }
