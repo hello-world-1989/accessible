@@ -19,7 +19,8 @@ jobs:
         id: checksum-continue
         run: |
           ip_address=$(curl $XRAY_URL | md5sum)
-          github_ip=$(curl -s https://raw.githubusercontent.com/hello-world-1989/accessible/main/checksum.txt)
+          wget -O checksum1.txt https://github.com/hello-world-1989/accessible/releases/download/latest/checksum.txt
+          github_ip=$(cat checksum1.txt)
 
           result1="${ip_address// /}"
           result2="${github_ip// /}"
@@ -89,21 +90,23 @@ jobs:
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         uses: softprops/action-gh-release@v2
         with:
-          files: live/live.mp4
+          files: |
+            live/live.mp4
+            checksum.txt
           tag_name: latest
           append_body: false
 
-      - name: Commit files
-        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "github-actions"
-          # git config pull.rebase true
-          # git pull
-          git status
-          git add --all
-          git commit -m "Add videos"
-          git push
+      # - name: Commit files
+      #   if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+      #   run: |
+      #     git config --local user.email "action@github.com"
+      #     git config --local user.name "github-actions"
+      #     # git config pull.rebase true
+      #     # git pull
+      #     git status
+      #     git add --all
+      #     git commit -m "Add videos"
+      #     git push
 
       - name: Youtube Live
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}

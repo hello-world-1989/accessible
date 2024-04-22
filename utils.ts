@@ -45,11 +45,11 @@ export async function saveFile(encodedContent: any, sha: string, path: string) {
       content: encodedContent,
       committer: {
         name: 'End GFW',
-        email: 'end.gfw@hotmail.com',
+        email: 'si6.lee1989@gmail.com',
       },
       author: {
         name: 'End GFW',
-        email: 'end.gfw@hotmail.com',
+        email: 'si6.lee1989@gmail.com',
       },
     };
 
