@@ -78,6 +78,13 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           XRAY_URL: ${{ secrets.XRAY_URL }}
 
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: live.mp4
+          tag_name: latest
+          append_body: false
+      
       - name: Commit files
         run: |
           git config --local user.email "action@github.com"
