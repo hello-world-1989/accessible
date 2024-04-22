@@ -1,8 +1,8 @@
 name: Video
 
 on:
-  # push:
-  #   branches: ['main']
+  push:
+    branches: ['main']
   schedule:
     - cron: '20 * * * *'
   workflow_dispatch:
@@ -75,6 +75,7 @@ jobs:
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         run: |
           echo ${{ steps.checksum-continue.outputs.checksum }} > checksum.txt
+          git status
           yarn install
           yarn ts-node fetchVideo1.ts
         env:
@@ -84,6 +85,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           XRAY_URL: ${{ secrets.XRAY_URL }}
 
+      - name: Release
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: live/live.mp4
+          tag_name: latest
+          append_body: false
+
       - name: Commit files
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         run: |
@@ -91,6 +100,7 @@ jobs:
           git config --local user.name "github-actions"
           # git config pull.rebase true
           # git pull
+          git status
           git add --all
           git commit -m "Add videos"
           git push
