@@ -28,13 +28,13 @@ async function fetchYoutubeInstances2() {
       }
     }
 
-    if (result.length > 0) {
-      saveFile(
-        Buffer.from(JSON.stringify(result)).toString('base64'),
-        sha,
-        'youtube.json'
-      );
-    }
+    // if (result.length > 0) {
+    saveFile(
+      Buffer.from(JSON.stringify(result)).toString('base64'),
+      sha,
+      'youtube.json'
+    );
+    // }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
   }
@@ -76,17 +76,17 @@ async function fetchYoutubeInstances() {
 
     resources.push(...result2);
 
-    if (resources.length > 0) {
-      const shanghaiTime = formatDateToYYYYMMDD();
+    // if (resources.length > 0) {
+    const shanghaiTime = formatDateToYYYYMMDD();
 
-      const result = { updateTime: shanghaiTime, resources };
+    const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(
-        Buffer.from(JSON.stringify(result)).toString('base64'),
-        sha,
-        fileName
-      );
-    }
+    saveFile(
+      Buffer.from(JSON.stringify(result)).toString('base64'),
+      sha,
+      fileName
+    );
+    // }
   } catch (error) {
     console.log('An error occurred processing youtube:', error);
   }
@@ -254,17 +254,17 @@ async function fetchSearchXInstances() {
       }
     }
 
-    if (resources.length > 0) {
-      const shanghaiTime = formatDateToYYYYMMDD();
+    // if (resources.length > 0) {
+    const shanghaiTime = formatDateToYYYYMMDD();
 
-      const result = { updateTime: shanghaiTime, resources };
+    const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(
-        Buffer.from(JSON.stringify(result)).toString('base64'),
-        sha,
-        'searchx.json'
-      );
-    }
+    saveFile(
+      Buffer.from(JSON.stringify(result)).toString('base64'),
+      sha,
+      'searchx.json'
+    );
+    // }
   } catch (error) {
     console.log('An error occurred processing searchx:', error);
   }
@@ -299,17 +299,17 @@ async function fetchWikiInstances() {
       }
     }
 
-    if (resources.length > 0) {
-      const shanghaiTime = formatDateToYYYYMMDD();
+    // if (resources.length > 0) {
+    const shanghaiTime = formatDateToYYYYMMDD();
 
-      const result = { updateTime: shanghaiTime, resources };
+    const result = { updateTime: shanghaiTime, resources };
 
-      saveFile(
-        Buffer.from(JSON.stringify(result)).toString('base64'),
-        sha,
-        'wiki.json'
-      );
-    }
+    saveFile(
+      Buffer.from(JSON.stringify(result)).toString('base64'),
+      sha,
+      'wiki.json'
+    );
+    // }
   } catch (error) {
     console.log('An error occurred processing wiki:', error);
   }
