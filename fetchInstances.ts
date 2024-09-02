@@ -322,7 +322,7 @@ async function main() {
 
   await fetchSearchXInstances();
 
-  await fetchWikiInstances();
+  // await fetchWikiInstances();
 }
 
 main();
