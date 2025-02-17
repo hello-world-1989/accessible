@@ -70,8 +70,6 @@ jobs:
           node-version: 18.x
           cache: 'yarn'
 
-      
-
       - name: Fetch Video
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         run: |
