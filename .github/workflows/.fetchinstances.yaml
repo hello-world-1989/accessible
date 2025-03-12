@@ -3,8 +3,9 @@ name: Instances
 on:
   # push:
   #   branches: ['main']
-  schedule:
-    - cron: '15 */12 * * *'
+  #schedule:
+  #  - cron: '15 */12 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
