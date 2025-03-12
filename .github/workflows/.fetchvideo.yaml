@@ -1,10 +1,10 @@
 name: Video
 
 on:
-  push:
-    branches: ['main']
-  schedule:
-    - cron: '20 * * * *'
+  #push:
+  #  branches: ['main']
+  #schedule:
+  #  - cron: '20 * * * *'
   workflow_dispatch:
 
 jobs:
