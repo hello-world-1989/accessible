@@ -110,7 +110,7 @@ jobs:
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         env:
           LIVE_URL: ${{ secrets.LIVE_URL }}
-          MIRROR_UPDATE_RESTART_WEB_PATH: ${{ secrets.MIRROR_UPDATE_RESTART_WEB_PATH }}
+         # MIRROR_UPDATE_RESTART_WEB_PATH: ${{ secrets.MIRROR_UPDATE_RESTART_WEB_PATH }}
         run: |
           curl $LIVE_URL
-          curl $MIRROR_UPDATE_RESTART_WEB_PATH
+         # curl $MIRROR_UPDATE_RESTART_WEB_PATH
