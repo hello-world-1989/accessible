@@ -47,6 +47,8 @@ jobs:
         id: setup-ffmpeg
         if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
         uses: FedericoCarboni/setup-ffmpeg@v3.1
+        with:
+          ffmpeg-version: 6.1.0
 
       - name: Run FFmpeg
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
