@@ -36,36 +36,18 @@ jobs:
           XRAY_URL: ${{ secrets.XRAY_URL }}
 
 
-      - name: Cache ffmpeg
-        id: cache-ffmpeg
-        uses: actions/cache@v4
-        with:
-          path: /opt/hostedtoolcache/ffmpeg/6.1.0/
-          key: ${{ runner.os }}-ffmpeg-6.1.0
-      
-      - name: Setup FFmpeg
-        id: setup-ffmpeg
-        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
-        uses: FedericoCarboni/setup-ffmpeg@v3.1
-        with:
-          ffmpeg-version: 6.1.0
-          linking-type: static
-          github-token: ${{ github.token }}
-
-      - name: Run FFmpeg
-        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
-        run: |
-          echo ${{ steps.cache-ffmpeg.outputs.cache-hit }}
-          echo ${{ steps.setup-ffmpeg.outputs.ffmpeg-version }}
-          echo ${{ steps.setup-ffmpeg.outputs.ffmpeg-path }}
-
-          sudo ln -s /opt/hostedtoolcache/ffmpeg/6.1.0/x64/ffmpeg /usr/bin/ffmpeg
-
-          ffmpeg -h
-
-
       - uses: actions/checkout@v4
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+
+      - name: Setup FFmpeg
+        if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
+        run: |
+          tar -xf ffmpeg-6.1.tar.xz
+          cd ffmpeg-6.1
+          ./configure --enable-static
+          make -j$(nproc)
+          sudo make install
+          ffmpeg --version
       
       - name: Use Node.js ${{ matrix.node-version }}
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
