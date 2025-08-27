@@ -49,6 +49,8 @@ jobs:
         uses: FedericoCarboni/setup-ffmpeg@v3.1
         with:
           ffmpeg-version: 6.1.0
+          linking-type: static
+          github-token: ${{ github.token }}
 
       - name: Run FFmpeg
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
