@@ -42,21 +42,24 @@ jobs:
       - name: Setup FFmpeg 6.1.0
         if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
         run: |
-          # Install NASM and YASM assemblers (required for FFmpeg compilation)
-          sudo apt-get update
-          sudo apt-get install -y nasm yasm build-essential pkg-config
+          # # Install NASM and YASM assemblers (required for FFmpeg compilation)
+          # sudo apt-get update
+          # sudo apt-get install -y nasm yasm build-essential pkg-config
           
-          # Download FFmpeg 6.1.0 source if not present
-          if [ ! -f "ffmpeg-6.1.tar.xz" ]; then
-            wget https://ffmpeg.org/releases/ffmpeg-6.1.tar.xz
-          fi
+          # # Download FFmpeg 6.1.0 source if not present
+          # if [ ! -f "ffmpeg-6.1.tar.xz" ]; then
+          #   wget https://ffmpeg.org/releases/ffmpeg-6.1.tar.xz
+          # fi
           
-          # Extract and build FFmpeg 6.1.0
-          tar -xf ffmpeg-6.1.tar.xz
-          cd ffmpeg-6.1
-          ./configure --enable-static --disable-shared
-          make -j$(nproc)
-          sudo make install
+          # # Extract and build FFmpeg 6.1.0
+          # tar -xf ffmpeg-6.1.tar.xz
+          # cd ffmpeg-6.1
+          # ./configure --enable-static --disable-shared
+          # make -j$(nproc)
+          # sudo make install
+          sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
+          sudo apt update
+          sudo apt install ffmpeg
           ffmpeg -version
       
       - name: Use Node.js ${{ matrix.node-version }}
