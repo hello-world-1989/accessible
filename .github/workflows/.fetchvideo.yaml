@@ -57,7 +57,7 @@ jobs:
           # ./configure --enable-static --disable-shared
           # make -j$(nproc)
           # sudo make install
-          sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
+          # sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg6
           sudo apt update
           sudo apt install ffmpeg
           ffmpeg -version
