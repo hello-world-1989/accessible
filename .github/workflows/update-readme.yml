@@ -24,20 +24,20 @@ jobs:
           # Check if readme already has a timestamp line
           if grep -q "^Last Updated:" readme.md; then
             # Replace existing timestamp
-            sed -i "s/^Last Updated:.*/Last Updated: $TIMESTAMP/" readme.md
+            sed -i "s/^Last Updated:.*/Last Updated: $TIMESTAMP/" Readme.md
           else
             # Add timestamp at the beginning
             echo "Last Updated: $TIMESTAMP" > temp_readme.md
             echo "" >> temp_readme.md
-            cat readme.md >> temp_readme.md
-            mv temp_readme.md readme.md
+            cat Readme.md >> temp_readme.md
+            mv temp_readme.md Readme.md
           fi
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add readme.md
+          git add Readme.md
           
           # Check if there are changes to commit
           if git diff --staged --quiet; then
