@@ -1,0 +1,48 @@
+name: Update README Weekly
+
+on:
+  schedule:
+    - cron: '0 5 * * 0'  # Run every Sunday at midnight UTC
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update README with timestamp
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          # Check if readme already has a timestamp line
+          if grep -q "^Last Updated:" readme.md; then
+            # Replace existing timestamp
+            sed -i "s/^Last Updated:.*/Last Updated: $TIMESTAMP/" readme.md
+          else
+            # Add timestamp at the beginning
+            echo "Last Updated: $TIMESTAMP" > temp_readme.md
+            echo "" >> temp_readme.md
+            cat readme.md >> temp_readme.md
+            mv temp_readme.md readme.md
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add readme.md
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update README timestamp [skip ci]"
+            git push
+          fi
