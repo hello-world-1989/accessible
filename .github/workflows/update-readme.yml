@@ -22,7 +22,7 @@ jobs:
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           
           # Check if readme already has a timestamp line
-          if grep -q "^Last Updated:" readme.md; then
+          if grep -q "^Last Updated:" Readme.md; then
             # Replace existing timestamp
             sed -i "s/^Last Updated:.*/Last Updated: $TIMESTAMP/" Readme.md
           else
