@@ -91,7 +91,7 @@ jobs:
             live/live.mp4
             checksum.txt
           tag_name: latest
-          append_body: false
+          overwrite_files: true
 
       # - name: Commit files
       #   if: ${{ steps.checksum-continue.outputs.continue == 'y' }}
