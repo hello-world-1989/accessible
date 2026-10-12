@@ -6,6 +6,11 @@ on:
   schedule:
     - cron: '20 * * * *'
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Rebuild the video even if the links did not change'
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -24,7 +29,7 @@ jobs:
 
           result1="${ip_address// /}"
           result2="${github_ip// /}"
-          if [ "$result1" = "$result2" ]; then
+          if [ "$result1" = "$result2" ] && [ "$FORCE" != "true" ]; then
               echo "equal"
               echo "continue=n" >> "$GITHUB_OUTPUT"
           else 
@@ -34,6 +39,7 @@ jobs:
           fi
         env:
           XRAY_URL: ${{ secrets.XRAY_URL }}
+          FORCE: ${{ github.event.inputs.force }}
 
 
       - uses: actions/checkout@v4
