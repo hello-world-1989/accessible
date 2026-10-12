@@ -11,11 +11,11 @@ const DURATION = parseInt(process.env.DURATION ?? '60'); //each QR code last 60 
 
 // Output 1280x720 with a large QR code: the source videos are 640x360 at ~50 kbps, and a
 // 150 px QR code of a long VLESS/Hysteria2 link (~80 modules) was 2 px per module and
-// unreadable after compression. Now ~7 px per module at 720p, low error correction (fewer modules)
+// unreadable after compression. Now ~8 px per module at 720p, low error correction (fewer modules)
 // and a sharp encode (CRF 20, keyframe every 2 s for YouTube).
 const WIDTH = parseInt(process.env.VIDEO_WIDTH ?? '1280');
 const HEIGHT = parseInt(process.env.VIDEO_HEIGHT ?? '720');
-const QR_SIZE = parseInt(process.env.QR_SIZE ?? '600');
+const QR_SIZE = parseInt(process.env.QR_SIZE ?? '680');
 
 async function fetchVideo() {
   try {
